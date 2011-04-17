@@ -1,7 +1,33 @@
 ## Parkel 0.0
 
-class Parkel(object):
+class ParkelView(object):
     def __init__(self):
+        self.game = None
+        self.current_player = None
+        self.winning_player = None
+
+    def start_game(self):
+        self.winning_player = self.game.start_game(self)
+        self.end_game()
+
+    def start_turn(self, player):
+        pass
+
+    def end_turn(self):
+        pass
+
+    def end_game(self):
+        pass
+
+    def roll(self, dice):
+        pass
+
+    def decide(self):
+        pass
+
+class Parkel(object):
+    def __init__(self, view):
+        self.view = view
         self.goal = 10000
         self.players = []
     
@@ -19,7 +45,9 @@ class Parkel(object):
         """Return winning player."""
 
         if len(self.players) == 0:
-            return
+            return -1
+
+        view.start_game()
 
         for p in players:
             p.game = self
@@ -33,6 +61,7 @@ class Parkel(object):
                     return p
     
     def turn(player):
+        view.start_turn(player)
         player.rolls = 0
         player.kept = []
         player.begin_turn()
@@ -42,11 +71,14 @@ class Parkel(object):
             d = self.roll(n);
             player.rolls += 1
 
+            view.roll(d)
+
             if not self.points_possible(d):
                 player.kept = []
                 return
 
             r = player.decide(d)
+            view.decie()
 
             if r == 0:
                 break
@@ -68,9 +100,11 @@ class Parkel(object):
                 return
 
         player.score += self.determine_points(player.kept)
+        view.end_turn()
     
 
     def points_possible(self, dice):
+        """Determine if it is possible to score points with dice."""
         pass
 
     def determine_points(self, kept):
