@@ -1,7 +1,10 @@
-## Parkle 0.1
+## Parkle 0.2
 ##
 ## Bradley Zeis
 ## Zoli Kahn
+
+import sys
+import os
 
 import random
 rand = random.Random()
@@ -163,7 +166,7 @@ class ParkleView(object):
 class Parkle(object):
     def __init__(self, view):
         self.view = view
-        self.goal = 1000
+        self.goal = 10000
         self.players = []
     
     def roll(self, n):
@@ -276,7 +279,7 @@ class Parkle(object):
             for keptset in group:
                 setscore = calculate_one_keptset(keptset)
                 c += len(keptset)
-                if not setscore:
+                if not setscore or len(keptset) == 0:
                     self.view.invalid_decision()
                     player.kept = player.kept[:-1]
                     reroll = False
@@ -340,7 +343,7 @@ class ParklePlayer(object):
 
 class ParkleConsoleView(ParkleView):
     def start_game(self):
-        print "Parkle v0.1\n----------------\n"
+        print "Parkle v0.2\n----------------\n"
 
         players = []
         while(1):
@@ -371,7 +374,11 @@ class ParkleConsoleView(ParkleView):
             elif r.lower() == "a":
                 path = raw_input("File path: ")
                 class_name = raw_input("Class Name: ")
-                ## Load ai player
+                sys.path.append(os.path.split(path)[0])
+                module = __import__(os.path.split(path)[1][:-3])
+                c = module.__dict__[class_name]
+                p = c()
+                players.append(p)
                 continue
 
             else:
@@ -389,12 +396,9 @@ class ParkleConsoleView(ParkleView):
             else:
                 print "  {0}: {1}".format(p.name, p.score)
 
-        print "\n(r)eplay, (n)ew game, (q)uit"
+        print "\n(r)eplay, (n)ew game"
 
         r = raw_input(":")
-        if r.lower() == "q":
-            return
-
         if r.lower() == "r":
             self.begin_game(self.game.players)
 
@@ -405,8 +409,7 @@ class ParkleConsoleView(ParkleView):
     def start_round(self):
         print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
         for p in self.game.players:
-            print p.name,
-            print ": ", p.score
+            print "{0}: {1}".format(p.name, p.score)
 
         print
 
@@ -466,11 +469,19 @@ class ParkleRealPlayer(ParklePlayer):
             k = raw_input(":")
 
             if k == "c":
+                for i in range(len(group)):
+                    if len(group[i]) == 0:
+                        group = []
+                        keptset = []
+                        group.append(keptset)
+
                 self.kept.append(group)
                 print "----------------\n"
                 return 1
 
             elif k == "s":
+                if not len(keptset):
+                    group = group[:-1]
                 self.kept.append(group)
                 return 0
 
@@ -506,4 +517,38 @@ class ParkleRealPlayer(ParklePlayer):
                         j[1] -= 1
                         keptset.append(i)
                         break
+
+
+class JimmyBot(ParklePlayer):
+
+    """This bot is a proof of concept to test if AI bots work.
+    
+    It is not meant to be a real opponent for either humans or
+    other bots.
+    
+    
+    Note: JimmyBot will get caught in an infinite loop if there are no
+    ones in his first roll.
+    """
+
+    def __init__(self):
+        self.name = "Jimmy Bot"
+
+
+    def decide(self, dice, round_score):
+        keptset = []
+        d = copy_dice(dice)
+        if d[0][0] == 1 and d[0][1] >= 1:
+            l = d[0][1]
+            for j in range(l):
+                keptset.append(1)
+                d[0][1] -= 1
+
+            self.kept.append([keptset])
+
+        else:
+            self.kept.append([[]])
+
+        return 0
+         
 
