@@ -1,4 +1,7 @@
 ## Parkel 0.0
+##
+## Bradley Zeis
+## Zoli Kahn
 
 class ParkelView(object):
     def __init__(self):
@@ -25,6 +28,7 @@ class ParkelView(object):
     def decide(self):
         pass
 
+
 class Parkel(object):
     def __init__(self, view):
         self.view = view
@@ -33,6 +37,8 @@ class Parkel(object):
     
     def roll(n):
         """Return list of n  (1 <= n <= 6) random numbers from 1 to 6.
+
+        Return value will be sorted by increasing value
         
         Return:
             [[value, number of value], ...]
@@ -42,10 +48,13 @@ class Parkel(object):
         pass
 
     def start_game(self):
-        """Return winning player."""
+        """Return winning player.
+        
+        Return: ParkelPlayer
+        """
 
         if len(self.players) == 0:
-            return -1
+            return None
 
         view.start_game()
 
@@ -66,7 +75,8 @@ class Parkel(object):
         player.kept = []
         player.begin_turn()
 
-        n = 6;
+        n = 6
+        s = 0
         while(1):
             d = self.roll(n);
             player.rolls += 1
@@ -78,7 +88,7 @@ class Parkel(object):
                 return
 
             r = player.decide(d)
-            view.decie()
+            view.decide()
 
             if r == 0:
                 break
@@ -88,9 +98,12 @@ class Parkel(object):
             nk = player.kept[-1]
             c = len(nk);
 
-            if not calculate_one_keptset(nk):
+            l = calculate_on_keptset(nk)
+            if not l:
                 player.kept = player.kept[0:-1]
                 continue
+            else:
+                s += l
 
             n -= c
             if n == 0:
@@ -99,21 +112,70 @@ class Parkel(object):
                 player.kept = []
                 return
 
-        player.score += self.determine_points(player.kept)
+        player.score += s
         view.end_turn()
-    
 
     def points_possible(self, dice):
-        """Determine if it is possible to score points with dice."""
-        pass
+        """Determine if it is possible to score points with dice.
+        
+        Return: boolean
+        """
+        num_pairs = 0
+        for i in dice:
+            if i[0] == 1 or i[0] == 5:
+                return True
 
-    def determine_points(self, kept):
-        """Return number of points represented."""
-        pass
+            if i[1] >= 3:
+                return True
+
+            if i[1] == 2:
+                num_pairs += 1
+
+            if num_pairs == 3:
+                return True
+
+        return False
 
     def calculate_one_keptset(self, kset):
-        """Calculate number of points for a single item in a kept set."""
+        """Calculate number of points for a single item in a kept set.
+        
+        Return: int
+        """
+        if len(kset) == 1:
+            if kset[0] == 1:
+                return 100
+            if kset[0] == 5:
+                return 50
+            return 0
+
+        elif len(kset) == 3:
+            if k[0] == k[1] and k[0] == k[2]:
+                if k[0] == 1:
+                    return 300;
+                else:
+                    return 100 * k[0]
+            return 0
+
+        elif len(kset) == 4:
+            if k[0] == k[1] and k[0] == k[2] and k[0] == k[3]:
+                return 1000
+            return 0
+
+        elif len(kset) == 5:
+            if k[0] == k[1] and k[0] == k[2] and k[0] == k[3] and k[0] == k[4]:
+                return 2000 ## Check the rules
+            return 0
+
+        elif len(kset) == 6:
+            if k[0] == k[1] and k[0] == k[2] and k[0] == k[3] and k[0] == k[4] and k[0] == k[5]:
+                return 3000 # Check the rules
+            else:
+                ## Three Pairs
+                ## Straight
+                return 0
+
         return 0;
+
 
 class ParkelPlayer(object):
     def __init__(self):
@@ -128,6 +190,8 @@ class ParkelPlayer(object):
         """User-defined setup method for the beginning of a turn.
         
         No altering of kept should be done here, only pre-calculations.
+
+        Return: None
         """
         pass
 
@@ -138,12 +202,14 @@ class ParkelPlayer(object):
             Change any scores or roll counts
             Call any methods of a Parkel instance
         
+        Return: int
         """
         pass
 
 
 class ConsoleView(ParkelView):
     pass
+
 
 class RealPlayer(ParkelPlayer):
     def begin_turn(self):
