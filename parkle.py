@@ -6,6 +6,110 @@
 import random
 rand = random.Random()
 
+def copy_dice(dice):
+   d = []
+   for i in dice:
+       d.append(list(i))
+   return d
+
+def points_possible(dice):
+    """Determine if it is possible to score points with dice.
+    
+    Return: boolean
+    """
+    num_pairs = 0
+    for i in dice:
+        if i[0] == 1 or i[0] == 5:
+            return True
+
+        if i[1] >= 3:
+            return True
+
+        if i[1] == 2:
+            num_pairs += 1
+
+        if num_pairs == 3:
+            return True
+
+    return False
+
+def calculate_one_keptset(kset):
+    """Calculate number of points for a single item in a kept set.
+    
+    Return: int
+    """
+    if len(kset) == 1:
+        if kset[0] == 1:
+            return 100
+        if kset[0] == 5:
+            return 50
+        return 0
+
+    elif len(kset) == 2:
+        s = 0
+        for i in kset:
+            if i == 1:
+                s += 100
+
+            elif i == 5:
+                s += 50
+
+            else:
+                return 0
+
+        return s
+
+    elif len(kset) == 3:
+        if kset[0] == kset[1] and kset[0] == kset[2]:
+            if kset[0] == 1:
+                return 300;
+            elif 2 <= kset[0] <= 6:
+                return 100 * kset[0]
+        return 0
+
+    elif len(kset) == 4:
+        if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3]:
+            return 1000
+        return 0
+
+    elif len(kset) == 5:
+        if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3] and kset[0] == kset[4]:
+            return 2000
+        return 0
+
+    elif len(kset) == 6:
+        if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3] and kset[0] == kset[4] and kset[0] == kset[5]:
+            return 3000
+        else:
+            num_pairs = 0
+            num_triples = 0
+            num = {}
+
+            for i in range(1,7):
+                c = kset.count(i)
+                num[i] = c
+                if c == 2:
+                    num_pairs += 1
+                if c == 3:
+                    num_triples += 1
+
+            ## Three Pairs
+            if num_pairs == 3:
+                return 1500
+
+            ## Two Triples
+            if num_triples == 2:
+                return 1500
+
+            ## Straight
+            if num.values().count(1) == 6:
+                return 3000
+
+            return 0
+
+    return 0;
+
+
 class ParkleView(object):
     def __init__(self):
         self.game = None
@@ -59,7 +163,7 @@ class ParkleView(object):
 class Parkle(object):
     def __init__(self, view):
         self.view = view
-        self.goal = 10000
+        self.goal = 1000
         self.players = []
     
     def roll(self, n):
@@ -110,9 +214,14 @@ class Parkle(object):
 
             self.view.end_round()
 
+            m = self.goal
             for p in self.players:
-                if p.score >= self.goal:
-                    return p
+                if p.score >= m:
+                    m = p
+
+            if m != self.goal:
+                return m
+                    
     
     def turn(self, player):
         self.view.current_player = player
@@ -134,15 +243,15 @@ class Parkle(object):
 
             reroll = True
 
-            self.view.roll(list(d))
+            self.view.roll(copy_dice(d))
 
-            if not self.points_possible(list(d)):
+            if not points_possible(d):
                 player.kept = []
                 round_score = 0
                 lost = True
                 break
 
-            result = player.decide(list(d), round_score)
+            result = player.decide(copy_dice(d), round_score)
             self.view.decide()
 
             #if r == 0:
@@ -165,7 +274,7 @@ class Parkle(object):
 
             groupscore = 0
             for keptset in group:
-                setscore = self.calculate_one_keptset(keptset)
+                setscore = calculate_one_keptset(keptset)
                 c += len(keptset)
                 if not setscore:
                     self.view.invalid_decision()
@@ -196,102 +305,6 @@ class Parkle(object):
         self.view.end_turn(round_score)
         return res
 
-    def points_possible(self, dice):
-        """Determine if it is possible to score points with dice.
-        
-        Return: boolean
-        """
-        num_pairs = 0
-        for i in dice:
-            if i[0] == 1 or i[0] == 5:
-                return True
-
-            if i[1] >= 3:
-                return True
-
-            if i[1] == 2:
-                num_pairs += 1
-
-            if num_pairs == 3:
-                return True
-
-        return False
-
-    def calculate_one_keptset(self, kset):
-        """Calculate number of points for a single item in a kept set.
-        
-        Return: int
-        """
-        if len(kset) == 1:
-            if kset[0] == 1:
-                return 100
-            if kset[0] == 5:
-                return 50
-            return 0
-
-        elif len(kset) == 2:
-            s = 0
-            for i in kset:
-                if i == 1:
-                    s += 100
-
-                elif i == 5:
-                    s += 50
-
-                else:
-                    return 0
-
-            return s
-
-        elif len(kset) == 3:
-            if kset[0] == kset[1] and kset[0] == kset[2]:
-                if kset[0] == 1:
-                    return 300;
-                elif 2 <= kset[0] <= 6:
-                    return 100 * kset[0]
-            return 0
-
-        elif len(kset) == 4:
-            if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3]:
-                return 1000
-            return 0
-
-        elif len(kset) == 5:
-            if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3] and kset[0] == kset[4]:
-                return 2000
-            return 0
-
-        elif len(kset) == 6:
-            if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3] and kset[0] == kset[4] and kset[0] == kset[5]:
-                return 3000
-            else:
-                num_pairs = 0
-                num_triples = 0
-                num = {}
-
-                for i in range(1,7):
-                    c = kset.count(i)
-                    num[i] = c
-                    if c == 2:
-                        num_pairs += 1
-                    if c == 3:
-                        num_triples += 1
-
-                ## Three Pairs
-                if num_pairs == 3:
-                    return 1500
-
-                ## Two Triples
-                if num_triples == 2:
-                    return 1500
-
-                ## Straight
-                if num.values().count(1) == 6:
-                    return 3000
-
-                return 0
-
-        return 0;
 
 
 class ParklePlayer(object):
@@ -323,11 +336,6 @@ class ParklePlayer(object):
         """
         pass
 
-    def copy_dice(self, dice):
-       d = []
-       for i in dice:
-           d.append(list(i))
-       return d
 
 
 class ParkleConsoleView(ParkleView):
@@ -371,6 +379,29 @@ class ParkleConsoleView(ParkleView):
 
         self.begin_game(players)
 
+    def end_game(self):
+        print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
+
+
+        for p in self.game.players:
+            if p == self.winning_player:
+                print "* {0}: {1}".format(p.name, p.score)
+            else:
+                print "  {0}: {1}".format(p.name, p.score)
+
+        print "\n(r)eplay, (n)ew game, (q)uit"
+
+        r = raw_input(":")
+        if r.lower() == "q":
+            return
+
+        if r.lower() == "r":
+            self.begin_game(self.game.players)
+
+        if r.lower() == "n":
+            self.start_game()
+
+
     def start_round(self):
         print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
         for p in self.game.players:
@@ -393,12 +424,6 @@ class ParkleConsoleView(ParkleView):
                 print i[0],
         print
 
-#    def decide(self):
-#        for i in self.current_player.kept:
-#            print i,
-#
-#        print
-    
     def invalid_decision(self):
         print "Decision invalid, please select something else."
 
@@ -408,7 +433,7 @@ class ParkleRealPlayer(ParklePlayer):
         pass
 
     def decide(self, dice, round_score):
-        d = self.copy_dice(dice)
+        d = copy_dice(dice)
         group = []      ## Group of keptsets from this roll
         keptset = []
         group.append(keptset)
@@ -454,11 +479,17 @@ class ParkleRealPlayer(ParklePlayer):
                 group.append(keptset)
                 continue
 
-            elif k == "q":
+            elif k == "a":
+                for i in d:
+                    for j in range(i[1]):
+                        keptset.append(i[0])
+
+
+            elif k == "l":
                 return -1
 
             elif k == "p":
-                d = self.copy_dice(dice)
+                d = copy_dice(dice)
                 group = []
                 keptset = []
                 group.append(keptset)
