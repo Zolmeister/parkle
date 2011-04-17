@@ -141,6 +141,10 @@ class ParkelPlayer(object):
         """
         pass
 
+
+class ConsoleView(ParkelView):
+    pass
+
 class RealPlayer(ParkelPlayer):
     def begin_turn(self):
         pass
