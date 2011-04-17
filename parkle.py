@@ -28,6 +28,9 @@ class ParkleView(object):
     def decide(self):
         pass
 
+    def invalid_decision(self):
+        pass
+
 
 class Parkle(object):
     def __init__(self, view):
@@ -98,12 +101,13 @@ class Parkle(object):
             nk = player.kept[-1]
             c = len(nk);
 
-            l = calculate_on_keptset(nk)
-            if not l:
+            ks = calculate_on_keptset(nk)
+            if not ks:
+                self.invalid_decision()
                 player.kept = player.kept[0:-1]
                 continue
             else:
-                s += l
+                s += ks
 
             n -= c
             if n == 0:
@@ -148,30 +152,59 @@ class Parkle(object):
                 return 50
             return 0
 
-        elif len(kset) == 3:
-            if k[0] == k[1] and k[0] == k[2]:
-                if k[0] == 1:
-                    return 300;
+        elif len(kset) == 2:
+            s = 0
+            for i in kset:
+                if i == 1:
+                    s += 100
+
+                elif i == 5:
+                    s += 50
+
                 else:
-                    return 100 * k[0]
+                    return 0
+
+            return s
+
+        elif len(kset) == 3:
+            if kset[0] == kset[1] and kset[0] == kset[2]:
+                if kset[0] == 1:
+                    return 300;
+                elif 2 <= kset[0] <= 6:
+                    return 100 * kset[0]
             return 0
 
         elif len(kset) == 4:
-            if k[0] == k[1] and k[0] == k[2] and k[0] == k[3]:
+            if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3]:
                 return 1000
             return 0
 
         elif len(kset) == 5:
-            if k[0] == k[1] and k[0] == k[2] and k[0] == k[3] and k[0] == k[4]:
-                return 2000 ## Check the rules
+            if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3] and kset[0] == kset[4]:
+                return 2000
             return 0
 
         elif len(kset) == 6:
-            if k[0] == k[1] and k[0] == k[2] and k[0] == k[3] and k[0] == k[4] and k[0] == k[5]:
-                return 3000 # Check the rules
+            if kset[0] == kset[1] and kset[0] == kset[2] and kset[0] == kset[3] and kset[0] == kset[4] and kset[0] == kset[5]:
+                return 3000
             else:
+                num_pairs = 0
+                num = {}
+
+                for i in range(1,7):
+                    c = kset.count(i)
+                    num[i] = c
+                    if c == 2:
+                        num_pairs += 1
+
                 ## Three Pairs
+                if num_pairs == 3:
+                    return 1500
+
                 ## Straight
+                if num.values().count(1) == 6:
+                    return 3000
+
                 return 0
 
         return 0;
@@ -207,11 +240,11 @@ class ParklePlayer(object):
         pass
 
 
-class ConsoleView(ParkleView):
+class ParkleConsoleView(ParkleView):
     pass
 
 
-class RealPlayer(ParklePlayer):
+class ParkleRealPlayer(ParklePlayer):
     def begin_turn(self):
         pass
 
