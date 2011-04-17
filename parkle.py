@@ -3,6 +3,9 @@
 ## Bradley Zeis
 ## Zoli Kahn
 
+import random
+rand = random.Random()
+
 class ParkleView(object):
     def __init__(self):
         self.game = None
@@ -38,7 +41,7 @@ class Parkle(object):
         self.goal = 10000
         self.players = []
     
-    def roll(n):
+    def roll(self, n):
         """Return list of n  (1 <= n <= 6) random numbers from 1 to 6.
 
         Return value will be sorted by increasing value
@@ -48,14 +51,25 @@ class Parkle(object):
 
             [[3, 2], [4, 4]] == Pair of 3s, four 4s.
         """
-        pass
+        l = []
+        for i in range(0, n):
+            l.append(rand.randint(1,6))
+
+        d = []
+        for i in range(1, 7):
+            c = l.count(i)
+            if c == 0:
+                continue
+
+            d.append([i, c])
+            
+        return d
 
     def start_game(self):
         """Return winning player.
         
         Return: ParklePlayer
         """
-
         if len(self.players) == 0:
             return None
 
@@ -64,6 +78,7 @@ class Parkle(object):
         for p in players:
             p.game = self
         
+        rand.seed()
         while 1:
             for p in self.players:
                 self.turn(p)
