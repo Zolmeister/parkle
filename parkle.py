@@ -1,9 +1,9 @@
-## Parkel 0.0
+## Parkle 0.0
 ##
 ## Bradley Zeis
 ## Zoli Kahn
 
-class ParkelView(object):
+class ParkleView(object):
     def __init__(self):
         self.game = None
         self.current_player = None
@@ -29,7 +29,7 @@ class ParkelView(object):
         pass
 
 
-class Parkel(object):
+class Parkle(object):
     def __init__(self, view):
         self.view = view
         self.goal = 10000
@@ -50,7 +50,7 @@ class Parkel(object):
     def start_game(self):
         """Return winning player.
         
-        Return: ParkelPlayer
+        Return: ParklePlayer
         """
 
         if len(self.players) == 0:
@@ -177,7 +177,7 @@ class Parkel(object):
         return 0;
 
 
-class ParkelPlayer(object):
+class ParklePlayer(object):
     def __init__(self):
         self.game = None
         self.name = ""
@@ -200,18 +200,18 @@ class ParkelPlayer(object):
         
         Do NOT:
             Change any scores or roll counts
-            Call any methods of a Parkel instance
+            Call any methods of a Parkle instance
         
         Return: int
         """
         pass
 
 
-class ConsoleView(ParkelView):
+class ConsoleView(ParkleView):
     pass
 
 
-class RealPlayer(ParkelPlayer):
+class RealPlayer(ParklePlayer):
     def begin_turn(self):
         pass
 
