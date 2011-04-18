@@ -168,6 +168,7 @@ class Parkle(object):
         self.view = view
         self.goal = 10000
         self.players = []
+        self.scores = []
     
     def roll(self, n):
         """Return list of n  (1 <= n <= 6) random numbers from 1 to 6.
@@ -201,9 +202,12 @@ class Parkle(object):
         if len(self.players) == 0:
             return None
 
+        self.scores = []
+        n = 0
         for p in self.players:
-            p.game = self
-            p.score = 0
+            self.scores.append(0)
+            p.n = n
+            n += 1
         
         rand.seed()
         while 1:
@@ -219,7 +223,7 @@ class Parkle(object):
 
             m = self.goal
             for p in self.players:
-                if p.score >= m:
+                if self.scores[p.n] >= m:
                     m = p
 
             if m != self.goal:
@@ -235,13 +239,13 @@ class Parkle(object):
 
         res = 0
 
-        n = 6
+        dice_left = 6
         round_score = 0
         reroll = True
         lost = False
         while 1:
             if reroll:
-                d = self.roll(n);
+                d = self.roll(dice_left);
                 player.rolls += 1
 
             reroll = True
@@ -254,11 +258,8 @@ class Parkle(object):
                 lost = True
                 break
 
-            result = player.decide(copy_dice(d), round_score)
+            result = player.decide(copy_dice(d), list(self.scores), round_score)
             self.view.decide()
-
-            #if r == 0:
-            #   break
 
             if result == -1:
                 res = -1;
@@ -279,13 +280,21 @@ class Parkle(object):
             for keptset in group:
                 setscore = calculate_one_keptset(keptset)
                 c += len(keptset)
-                if not setscore or len(keptset) == 0:
+                if not setscore:
+                    if len(keptset) == 0 and len(player.kept) == 1:
+                        lost = True
+                        break
+
                     self.view.invalid_decision()
                     player.kept = player.kept[:-1]
                     reroll = False
                     break
+
                 else:
                     groupscore += setscore
+
+            if lost:
+                break
 
             if not reroll:
                 continue
@@ -295,16 +304,16 @@ class Parkle(object):
             if result == 0:
                 break
 
-            n -= c
-            if n == 0:
-                n = 6
-            elif n < 0 or n > 6:
+            dice_left -= c
+            if dice_left == 0:
+                dice_left = 6
+            elif dice_left < 0 or dice_left > 6:
                 player.kept = []
                 s = 0
                 break
 
         if not lost:
-            player.score += round_score
+            self.scores[player.n] += round_score
         self.view.end_turn(round_score)
         return res
 
@@ -312,12 +321,11 @@ class Parkle(object):
 
 class ParklePlayer(object):
     def __init__(self):
-        self.game = None
         self.name = ""
-        self.score = 0;
         self.kept = []; # [[[1, 1], [5]], [[3, 3, 3]]] = Pair of 2s and a 5 kept first roll, triple 3s kept second roll
                         # Each sublist is called a "kept-set"
-        self.rolls = 0
+        self.n = 0      # Player order
+        self.rolls = 0  # Number of rolls this turn
 
     def begin_turn(self):
         """User-defined setup method for the beginning of a turn.
@@ -328,7 +336,7 @@ class ParklePlayer(object):
         """
         pass
 
-    def decide(self, dice, round_score):
+    def decide(self, dice, all_scores, round_score):
         """Create a group of keptsets, append the group to self.kept.
         
         Do NOT:
@@ -392,9 +400,9 @@ class ParkleConsoleView(ParkleView):
 
         for p in self.game.players:
             if p == self.winning_player:
-                print "* {0}: {1}".format(p.name, p.score)
+                print "* {0}: {1}".format(p.name, self.game.scores[p.n])
             else:
-                print "  {0}: {1}".format(p.name, p.score)
+                print "  {0}: {1}".format(p.name, self.game.scores[p.n])
 
         print "\n(r)eplay, (n)ew game"
 
@@ -409,16 +417,16 @@ class ParkleConsoleView(ParkleView):
     def start_round(self):
         print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
         for p in self.game.players:
-            print "{0}: {1}".format(p.name, p.score)
+            print "{0}: {1}".format(p.name, self.game.scores[p.n])
 
         print
 
     def start_turn(self):
         print "--------------------------------------------------------------------------------"
-        print "{0}'s turn.\n\tScore: {1}".format(self.current_player.name, self.current_player.score)
+        print "{0}'s turn.\n\tScore: {1}".format(self.current_player.name, self.game.scores[self.current_player.n])
 
     def end_turn(self, round_score):
-        print "\nRound Score: {0}\nTotal Score: {1}\n".format(round_score, self.current_player.score)
+        print "\nRound Score: {0}\nTotal Score: {1}\n".format(round_score, self.game.scores[self.current_player.n])
 
     def roll(self, dice):
         print "Roll {0}:\n\t".format(self.current_player.rolls),
@@ -435,7 +443,7 @@ class ParkleRealPlayer(ParklePlayer):
     def begin_turn(self):
         pass
 
-    def decide(self, dice, round_score):
+    def decide(self, dice, all_scores, round_score):
         d = copy_dice(dice)
         group = []      ## Group of keptsets from this roll
         keptset = []
@@ -535,7 +543,7 @@ class JimmyBot(ParklePlayer):
         self.name = "Jimmy Bot"
 
 
-    def decide(self, dice, round_score):
+    def decide(self, dice, all_scores, round_score):
         keptset = []
         d = copy_dice(dice)
         if d[0][0] == 1 and d[0][1] >= 1:
