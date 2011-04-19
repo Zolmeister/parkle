@@ -15,6 +15,25 @@ def copy_dice(dice):
        d.append(list(i))
    return d
 
+def flatten_dice(dice):
+    nd = []
+    for value in dice:
+        for i in range(value[1]):
+            nd.append(value[0])
+
+    return nd
+
+def nest_dice(flattened_dice):
+    dice = []
+    for i in range(1, 7):
+        c = l.count(i)
+        if c == 0:
+            continue
+
+        dice.append([i, c])
+        
+    return dice
+
 def points_possible(dice):
     """Determine if it is possible to score points with dice.
     
@@ -47,20 +66,6 @@ def calculate_one_keptset(kset):
         if kset[0] == 5:
             return 50
         return 0
-
-    elif len(kset) == 2:
-        s = 0
-        for i in kset:
-            if i == 1:
-                s += 100
-
-            elif i == 5:
-                s += 50
-
-            else:
-                return 0
-
-        return s
 
     elif len(kset) == 3:
         if kset[0] == kset[1] and kset[0] == kset[2]:
@@ -282,8 +287,13 @@ class Parkle(object):
                 c += len(keptset)
                 if not setscore:
                     if len(keptset) == 0 and len(player.kept) == 1:
-                        lost = True
-                        break
+                        if result == 1:
+                            self.view.invalid_decision()
+                            reroll = False
+                            continue
+                        else:
+                            lost = True
+                            break
 
                     self.view.invalid_decision()
                     player.kept = player.kept[:-1]
@@ -292,6 +302,8 @@ class Parkle(object):
 
                 else:
                     groupscore += setscore
+
+            ## Make sure player didn't cheat by selecting dice that aren't rolled
 
             if lost:
                 break
@@ -315,6 +327,7 @@ class Parkle(object):
         if not lost:
             self.scores[player.n] += round_score
         self.view.end_turn(round_score)
+        player.end_turn(list(self.scores), round_score)
         return res
 
 
@@ -347,6 +360,8 @@ class ParklePlayer(object):
         """
         pass
 
+    def end_turn(self, all_scores, round_score):
+        pass
 
 
 class ParkleConsoleView(ParkleView):
@@ -450,7 +465,6 @@ class ParkleRealPlayer(ParklePlayer):
         group.append(keptset)
         first = True
         while 1:
-
             if not first:
                 print "\t",
                 for i in d:
@@ -535,6 +549,10 @@ class JimmyBot(ParklePlayer):
     other bots.
     
     
+    [[value, number], [value, number], [value, number]]
+
+    [[1, 3], [2, 2], [6, 1]]
+    
     Note: JimmyBot will get caught in an infinite loop if there are no
     ones in his first roll.
     """
@@ -548,11 +566,14 @@ class JimmyBot(ParklePlayer):
         d = copy_dice(dice)
         if d[0][0] == 1 and d[0][1] >= 1:
             l = d[0][1]
-            for j in range(l):
-                keptset.append(1)
-                d[0][1] -= 1
+            if l == 2:
+                self.kept.append([[1], [1]])
+            else:
+                for j in range(l):
+                    keptset.append(1)
+                    d[0][1] -= 1
 
-            self.kept.append([keptset])
+                self.kept.append([keptset])
 
         else:
             self.kept.append([[]])
