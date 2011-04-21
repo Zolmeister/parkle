@@ -1,4 +1,4 @@
-Parkle v0.2.1 
+Parkle v0.2. 
 ============= 
 
 Parkle is an open-source [Farkle](http://en.wikipedia.org/wiki/Farkle)
@@ -22,7 +22,7 @@ and create another empty set.
 6. Append the group to `self.kept`.
 7. Return 1 to roll again, 0 to end turn.
 
-Parkle v0.2.1 comes with a sample AI bot, JimmyBot. Note that this is just a
+Parkle v0.2.2 comes with a sample AI bot, JimmyBot. Note that this is just a
 proof of concept, it is not intended to be a real opponent.
 
 To load a bot into the game, select "a" when adding players, enter the

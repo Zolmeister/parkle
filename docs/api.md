@@ -1,4 +1,4 @@
-API Reference (parkle v0.2.1)
+API Reference (parkle v0.2.2)
 =============================
 
 Concepts:
