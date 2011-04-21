@@ -32,7 +32,9 @@ and the name of your class.
 Documentation:
 --------------
 
-[Point Values/Rules](http://wwww.github.com/bradzeis/parkle/master/docs/rules.md)
-[API Reference](http://www.github.com/bradzeis/parkle/master/docs/api.md)
-[Bot Creation](http://www.github.com/bradzeis/parkle/master/docs/bots.md)
+[Point Values/Rules](http://wwww.github.com/bradzeis/parkle/blob/master/docs/rules.md)
+
+[API Reference](http://www.github.com/bradzeis/parkle/blob/master/docs/api.md)
+
+[Bot Creation](http://www.github.com/bradzeis/parkle/blob/master/docs/bots.md)
 

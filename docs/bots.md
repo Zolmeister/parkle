@@ -1,7 +1,7 @@
 Creating a Bot (parkle v0.2.2)
 ==============================
 
-First, make sure you have read and understand the [framework](http://www.github.com/bradzeis/parkle/master/docs/api.md).
+First, make sure you have read and understand the [framework](http://www.github.com/bradzeis/parkle/blob/master/docs/api.md).
 
 To create a bot, just follow this method:
 
