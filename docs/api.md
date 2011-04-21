@@ -114,6 +114,10 @@ look like:
 
 Each group should be a list of sets.
 
+### Bots
+
+[Creating a Parkle Bot](http://www.github.com/bradzeis/parkle/master/docs/bots.md).
+
 Functions:
 ----------
 `**copy_dice(**dice**)**`

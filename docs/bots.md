@@ -17,3 +17,5 @@ To create a bot, just follow this method:
 
 Look at the `RealPlayer` and `JimmyBot` source for examples.
 
+Be sure to look at the API and use the `points_possible()` and `calculate_one_keptset()` method
+to analyze your sets/dice.
