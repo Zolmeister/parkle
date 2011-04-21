@@ -150,9 +150,37 @@ Returns: int
 
 Classes:
 --------
-`Parkle`
-`ParklePlayer`
-`ParkleView`
+
+### `ParklePlayer`
+`**begin_turn(**all_scores, round_score**)**`
+Called at the beginning of a player's turn.
+
+`**end_turn(**all_scores, round_score**)**`
+Called at the end of a player's turn.
+
+`**decide(**dice, all_scores, round_score**)**`
+Called for each roll. This is where the player decides what to keep.
+
+Append a group of sets to `ParklePlayer.kept` for each roll.
+
+Return: -1 to forfeit, 0 to stop, 1 to continue
+
+### `ParkleView`
+`**start_game()**`
+Usually used as the entry point for the game. Create the
+list of players here.
+
+Always end this method with a call to `begin_game()`.
+
+`**begin_game(**players=None**)**`
+`**end_game()**`
+`**start_round()**`
+`**end_round()**`
+`**start_turn()**`
+`**end_turn()**`
+`**roll(**dice**)**`
+`**decide()**`
+`**invalid_decision()**`
 
 Implementations:
 ----------------

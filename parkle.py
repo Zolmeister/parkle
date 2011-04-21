@@ -131,13 +131,15 @@ class ParkleView(object):
         """
         pass
 
-    def begin_game(self, players):
+    def begin_game(self, players=None):
         """Instantiate the game and begin it.
         
         Do not override in subclasses.
         """
         self.game = Parkle(self)
-        self.game.players = players
+        if players is not None:
+            self.players = players
+        self.game.players = self.players
         self.current_player = None
         self.winning_player = None
         self.winning_player = self.game.start_game()
@@ -232,7 +234,7 @@ class Parkle(object):
         self.view.start_turn()
         player.rolls = 0
         player.kept = []
-        player.begin_turn()
+        player.begin_turn(list(self.scores), 0)
 
         res = 0
 
@@ -380,7 +382,7 @@ class ParklePlayer(object):
         self.n = 0      # Player order
         self.rolls = 0  # Number of rolls this turn
 
-    def begin_turn(self):
+    def begin_turn(self, all_scores, round_score):
         """User-defined setup method for the beginning of a turn.
         
         No altering of kept should be done here, only pre-calculations.
@@ -494,7 +496,7 @@ class ParkleConsoleView(ParkleView):
 
 
 class ParkleRealPlayer(ParklePlayer):
-    def begin_turn(self):
+    def begin_turn(self, all_scores, round_score):
         pass
 
     def decide(self, dice, all_scores, round_score):
