@@ -248,7 +248,18 @@ class Parkle(object):
         round_score = 0
         reroll = True
         lost = False
+
+        kept_count = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+        rolled_count = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+
+        invalid_attempts = 0
+
         while 1:
+
+            if invalid_attempts == 3:
+                lost = True
+                break
+
             if reroll:
                 d = self.roll(dice_left);
                 player.rolls += 1
@@ -276,14 +287,26 @@ class Parkle(object):
                 group = player.kept[-1]
             except:
                 self.view.invalid_decision()
+                invalid_attempts += 1
                 reroll = False
                 continue
 
             c = 0
 
             groupscore = 0
-            kept_count = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+            
+            kept_count[1] = 0
+            kept_count[2] = 0
+            kept_count[3] = 0
+            kept_count[4] = 0
+            kept_count[5] = 0
+            kept_count[6] = 0
+
             for keptset in group:
+
+                if reroll == False:
+                    continue
+
                 for i in keptset:
                     kept_count[i] += 1
                 setscore = calculate_one_keptset(keptset)
@@ -292,6 +315,7 @@ class Parkle(object):
                     if len(keptset) == 0 and len(player.kept) == 1:
                         if result == 1:
                             self.view.invalid_decision()
+                            invalid_attempts += 1
                             reroll = False
                             continue
                         else:
@@ -299,6 +323,7 @@ class Parkle(object):
                             break
 
                     self.view.invalid_decision()
+                    invalid_attempts += 1
                     player.kept = player.kept[:-1]
                     reroll = False
                     break
@@ -306,29 +331,40 @@ class Parkle(object):
                 else:
                     groupscore += setscore
 
-            ## Make sure player didn't cheat by selecting dice that aren't rolled
-            dice_rolled = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
-            for i in d:
-                dice_rolled[i[0]] = i[1]
-
-            for i in range(1, 7):
-                if kept_count[i] > dice_rolled[i]:
-                    self.view.invalid_decision()
-                    player.kept = player.kept[:-1]
-                    reroll = False
-                    continue
-
             if lost:
                 break
 
             if not reroll:
                 continue
 
+            ## Make sure player didn't cheat by selecting dice that aren't rolled
+            rolled_count[1] = 0
+            rolled_count[2] = 0
+            rolled_count[3] = 0
+            rolled_count[4] = 0
+            rolled_count[5] = 0
+            rolled_count[6] = 0
+            for i in d:
+                rolled_count[i[0]] = i[1]
+
+            for i in range(1, 7):
+                if kept_count[i] > rolled_count[i]:
+                    self.view.invalid_decision()
+                    invalid_attempts += 1
+                    player.kept = player.kept[:-1]
+                    reroll = False
+                    continue
+
+            if reroll == False:
+                continue
+
             round_score += groupscore
 
+            ## Player ended turn
             if result == 0:
                 break
 
+            ## Figure out what to roll next
             dice_left -= c
             if dice_left == 0:
                 dice_left = 6
@@ -342,7 +378,6 @@ class Parkle(object):
         self.view.end_turn(round_score)
         player.end_turn(list(self.scores), round_score)
         return res
-
 
 
 class ParklePlayer(object):
@@ -574,10 +609,6 @@ class JimmyBot(ParklePlayer):
         print
 
     def decide(self, dice, all_scores, round_score):
-
-        self.kept.append([[1]])
-        return 0
-
         keptset = []
         d = copy_dice(dice)
         if d[0][0] == 1 and d[0][1] >= 1:
