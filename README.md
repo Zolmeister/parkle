@@ -14,10 +14,13 @@ To play, clone/download the repository, `cd` to the parkle directory, and run:
 
 Requires Python 2.x.
 
-How to Play:
-============
+How to Play Parkle:
+===================
 
 If you do not know how to play Farkle, read the rules [here](http://en.wikipedia.org/wiki/Farkle).
+The basic rules of Farkle are used in Parkle. For a list of possible
+point values, read [this](http://www.github.com/bradzeis/parkle/master/rules.md)
+document.
 
 After you create the players, the first player will "roll". That player
 then selects dice and continues rolling.
@@ -28,7 +31,7 @@ sets. For example:
     [5] [5] [5] = 150 points
     [5, 5, 5] = 500 points
 
-Create a separate group for 3-, 4-, 5-, and 6-of-a-kinds, straights,
+Create a separate set for 3-, 4-, 5-, and 6-of-a-kinds, straights,
 three pairs, and two 3-of-a-kinds. To add all of the current dice
 into the current set, enter "a".
 
@@ -37,7 +40,7 @@ die into the group, type a numer and then hit enter.
 
 To create a new set, enter "n".
 
-When you are satisfied with the groups that you have created for that
+When you are satisfied with the sets that you have created for that
 roll, you can either:
 
     "c" - roll again
@@ -82,4 +85,11 @@ proof of concept, it is not intended to be a real opponent.
 To load a bot into the game, select "a" when adding players, enter the
 name of the python file where your class resides (with the .py extension),
 and the name of your class.
+
+Documentation:
+==============
+
+[Point Values/Rules](http://wwww.github.com/bradzeis/parkle/master/docs/rules.md)
+[API Reference](http://www.github.com/bradzeis/parkle/master/docs/api.md)
+[Bot Creation](http://www.github.com/bradzeis/parkle/master/docs/bots.md)
 
