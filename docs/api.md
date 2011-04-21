@@ -156,5 +156,36 @@ Classes:
 
 Implementations:
 ----------------
-`RealPlayer`
 `ParkleConsoleView`
+This implementation of `ParkleView` outputs the game state to `stdout`.
+
+`RealPlayer`
+This implementation of `ParklePlayer` allows users to specify what to
+keep in the `decide()` method.
+
+The output looks like this:
+
+    Roll n:
+        v v v v v
+
+    [k, k, k] [k, k, k] | [v]
+
+The "v, v, v, v, v" part is what is left on the table.
+The "[k, k, k] [k, k, k]" part is what was kept from previous rolls.
+The "[v]" part is what is in the current set for this roll so far.
+
+The "k" and "v" parts are always separated by a pipe character ("|").
+
+The controls for human players are simple:
+
+- "[1-9]" - select a number from the current dice on the table
+- "c" - continue rolling, keeping your current sets
+- "s" - end your turn with your current sets
+- "p" - clear the sets you have formed from the current roll (old sets stay)
+- "n" - create new set
+- "l" - forfeit the game
+
+`JimmyBot`
+This is an experimental implementation of an AI bot to test bot functionality.
+It is not meant to be a real opponent.
+
