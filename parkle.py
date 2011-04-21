@@ -282,7 +282,10 @@ class Parkle(object):
             c = 0
 
             groupscore = 0
+            kept_count = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
             for keptset in group:
+                for i in keptset:
+                    kept_count[i] += 1
                 setscore = calculate_one_keptset(keptset)
                 c += len(keptset)
                 if not setscore:
@@ -304,6 +307,16 @@ class Parkle(object):
                     groupscore += setscore
 
             ## Make sure player didn't cheat by selecting dice that aren't rolled
+            dice_rolled = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+            for i in d:
+                dice_rolled[i[0]] = i[1]
+
+            for i in range(1, 7):
+                if kept_count[i] > dice_rolled[i]:
+                    self.view.invalid_decision()
+                    player.kept = player.kept[:-1]
+                    reroll = False
+                    continue
 
             if lost:
                 break
@@ -351,10 +364,6 @@ class ParklePlayer(object):
 
     def decide(self, dice, all_scores, round_score):
         """Create a group of keptsets, append the group to self.kept.
-        
-        Do NOT:
-            Change any scores or roll counts
-            Call any methods of a Parkle instance
         
         Return: int
         """
@@ -565,6 +574,10 @@ class JimmyBot(ParklePlayer):
         print
 
     def decide(self, dice, all_scores, round_score):
+
+        self.kept.append([[1]])
+        return 0
+
         keptset = []
         d = copy_dice(dice)
         if d[0][0] == 1 and d[0][1] >= 1:
