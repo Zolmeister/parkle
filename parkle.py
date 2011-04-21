@@ -55,7 +55,7 @@ def points_possible(dice):
 
     return False
 
-def calculate_one_keptset(kset):
+def calculate_set(kset):
     """Calculate number of points for a single item in a kept set.
     
     Return: int
@@ -303,7 +303,7 @@ class Parkle(object):
 
                 for i in keptset:
                     kept_count[i] += 1
-                setscore = calculate_one_keptset(keptset)
+                setscore = calculate_set(keptset)
                 c += len(keptset)
                 if not setscore:
                     if len(keptset) == 0 and len(player.kept) == 1:

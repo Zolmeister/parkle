@@ -70,7 +70,7 @@ To convert between the two formats, use `nest_dice()` and `flatten_dice()`.
 
 ### Sets
 
-The method that calculates points, `calculate_one_keptset()`, operates
+The method that calculates points, `calculate_set()`, operates
 on "sets" of kept dice.
 
 The reason for this is simple: a triple of three fives is worth
@@ -145,7 +145,7 @@ Return whether it is possible to get points with a nested dice `dice`.
 
 Returns: Boolean
 
-**calculate_one_keptset(**keptset**)**
+**calculate_set(**keptset**)**
 Return the points possible for a kept set `keptset`.
 
 For the point values for sets, see [this](http://www.github.com/bradzeis/parkle/master/docs/rules.md) document.
