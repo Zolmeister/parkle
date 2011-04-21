@@ -370,7 +370,7 @@ class ParkleConsoleView(ParkleView):
 
         players = []
         while(1):
-            print "Add Player:"
+            print "Add Player (currently have {0}):".format(len(players))
             if len(players) < 2:
                 print "\t(h)uman player\n\t(a)i player\n\t(q)it\n"
 
@@ -398,10 +398,13 @@ class ParkleConsoleView(ParkleView):
                 path = raw_input("File path: ")
                 class_name = raw_input("Class Name: ")
                 sys.path.append(os.path.split(path)[0])
-                module = __import__(os.path.split(path)[1][:-3])
-                c = module.__dict__[class_name]
-                p = c()
-                players.append(p)
+                try:
+                    module = __import__(os.path.split(path)[1][:-3])
+                    c = module.__dict__[class_name]
+                    p = c()
+                    players.append(p)
+                except:
+                    print "Couldn't find file/class.\n"
                 continue
 
             else:
@@ -558,8 +561,8 @@ class JimmyBot(ParklePlayer):
     """
 
     def __init__(self):
-        self.name = "Jimmy Bot"
-
+        self.name = raw_input("Bot Name: ")
+        print
 
     def decide(self, dice, all_scores, round_score):
         keptset = []
