@@ -1,4 +1,4 @@
-## Parkle 0.2.2
+## Parkle 0.2.3
 ##
 ## Bradley Zeis
 ## Zoli Kahn
@@ -404,7 +404,7 @@ class ParklePlayer(object):
 
 class ParkleConsoleView(ParkleView):
     def start_game(self):
-        print "Parkle v0.2.2\n----------------\n"
+        print "Parkle v0.2.3\n----------------\n"
 
         players = []
         while(1):
