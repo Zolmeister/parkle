@@ -15,7 +15,7 @@ To play, clone/download the repository, `cd` to the parkle directory, and run:
 Requires Python 2.x.
 
 How to Play Parkle:
-===================
+-------------------
 
 If you do not know how to play Farkle, read the rules [here](http://en.wikipedia.org/wiki/Farkle).
 The basic rules of Farkle are used in Parkle. For a list of possible
@@ -54,7 +54,7 @@ change what you have selected in previous rolls.
 The first player to reach 10,000 points wins.
 
 Creating a Bot:
-===============
+---------------
 
 To create a bot, you need to create a subclass of `ParklePlayer`.
 
@@ -87,7 +87,7 @@ name of the python file where your class resides (with the .py extension),
 and the name of your class.
 
 Documentation:
-==============
+--------------
 
 [Point Values/Rules](http://wwww.github.com/bradzeis/parkle/master/docs/rules.md)
 [API Reference](http://www.github.com/bradzeis/parkle/master/docs/api.md)

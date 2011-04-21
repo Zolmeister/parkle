@@ -1,5 +1,5 @@
-Rules (parkle v0.2.1):
-======================
+Rules (parkle v0.2.1)
+=====================
 
 *Set: Point Value*
 
