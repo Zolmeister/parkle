@@ -554,6 +554,7 @@ class ParkleRealPlayer(ParklePlayer):
             elif k == "a":
                 for i in d:
                     for j in range(i[1]):
+                        i[1] -= 1
                         keptset.append(i[0])
 
 
