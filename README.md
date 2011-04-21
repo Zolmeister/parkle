@@ -9,64 +9,7 @@ Parkle started as a means of easily putting competing AI bots head to head
 in a game that offers a good balance between luck and strategy.
 
 To play, clone/download the repository, `cd` to the parkle directory, and run:
-
-    python play.py
-
-Requires Python 2.x.
-
-How to Play Parkle:
--------------------
-
-If you do not know how to play Farkle, read the rules [here](http://en.wikipedia.org/wiki/Farkle).
-The basic rules of Farkle are used in Parkle. For a list of possible
-point values, read [this](http://www.github.com/bradzeis/parkle/master/rules.md)
-document.
-
-After you create the players, the first player will "roll". That player
-then selects dice and continues rolling.
-
-When selecting dice, it is important to group together the dice into
-sets. For example:
-
-    [5] [5] [5] = 150 points
-    [5, 5, 5] = 500 points
-
-Create a separate set for 3-, 4-, 5-, and 6-of-a-kinds, straights,
-three pairs, and two 3-of-a-kinds. To add all of the current dice
-into the current set, enter "a".
-
-At the beginning of your turn, a set is created for you. To enter a
-die into the group, type a numer and then hit enter.
-
-To create a new set, enter "n".
-
-When you are satisfied with the sets that you have created for that
-roll, you can either:
-
-    "c" - roll again
-    "s" - end turn
-    "l" - quit game
-
-If you want to start over for the current roll, press "p". This will
-only undo what you have selected for the current roll. You cannot
-change what you have selected in previous rolls.
-
-The first player to reach 10,000 points wins.
-
-Creating a Bot:
----------------
-
-To create a bot, you need to create a subclass of `ParklePlayer`.
-
-In the `__init__` method, define `name`.
-
-Then, implement the `decide(dice, all_scores, round_score)` method.
-
-- `dice` - the dice rolled that turn (output by `Parkle.roll(n)`)
-- `all_scores` - a copy of the game's list of scores. You can
-determine your position with `all_scores[player.n]`
-- `round_score` - the points accumulated this turn, minus the
-current sets that you construct in the `decide()` method.
+at you construct in the `decide()` method.
 
 The best way to do that is:
 
