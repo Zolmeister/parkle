@@ -10,10 +10,10 @@ import random
 rand = random.Random()
 
 def copy_dice(dice):
-   d = []
-   for i in dice:
-       d.append(list(i))
-   return d
+    d = []
+    for i in dice:
+        d.append(list(i))
+    return d
 
 def flatten_dice(dice):
     nd = []
@@ -582,19 +582,10 @@ class ParkleRealPlayer(ParklePlayer):
 
 
 class JimmyBot(ParklePlayer):
-
     """This bot is a proof of concept to test if AI bots work.
     
     It is not meant to be a real opponent for either humans or
     other bots.
-    
-    
-    [[value, number], [value, number], [value, number]]
-
-    [[1, 3], [2, 2], [6, 1]]
-    
-    Note: JimmyBot will get caught in an infinite loop if there are no
-    ones in his first roll.
     """
 
     def __init__(self):
