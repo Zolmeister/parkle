@@ -120,32 +120,32 @@ Each group should be a list of sets.
 
 Functions:
 ----------
-`**copy_dice(**dice**)**`
+**copy_dice(**dice**)**
 Return a copy of the nested dice `dice`.
 
 Returns: list
 
-`**flatten_dice(**dice**)**`
+**flatten_dice(**dice**)**
 Return a flattened copy of nested dice `dice`.
 
 Returns: list
 
-`**nest_dice(**flattened_dice**)**`
+**nest_dice(**flattened_dice**)**
 Return a nested copy of flattened dice `flattened_dice`.
 
 Returns: list
 
-`**roll(**n**)**`
+**roll(**n**)**
 Return a nested dice set of size `n`.
 
 Returns: list
 
-`**points_possible(**dice**)**`
+**points_possible(**dice**)**
 Return whether it is possible to get points with a nested dice `dice`.
 
 Returns: Boolean
 
-`**calculate_one_keptset(**keptset**)**`
+**calculate_one_keptset(**keptset**)**
 Return the points possible for a kept set `keptset`.
 
 For the point values for sets, see [this](http://www.github.com/bradzeis/parkle/master/docs/rules.md) document.
@@ -156,13 +156,13 @@ Classes:
 --------
 
 ### `ParklePlayer`
-`**begin_turn(**all_scores, round_score**)**`
+**begin_turn(**all_scores, round_score**)**
 Called at the beginning of a player's turn.
 
-`**end_turn(**all_scores, round_score**)**`
+`**end_turn(**all_scores, round_score**)**
 Called at the end of a player's turn.
 
-`**decide(**dice, all_scores, round_score**)**`
+**decide(**dice, all_scores, round_score**)**
 Called for each roll. This is where the player decides what to keep.
 
 Append a group of sets to `ParklePlayer.kept` for each roll.
@@ -170,21 +170,21 @@ Append a group of sets to `ParklePlayer.kept` for each roll.
 Return: -1 to forfeit, 0 to stop, 1 to continue
 
 ### `ParkleView`
-`**start_game()**`
+**start_game()**
 Usually used as the entry point for the game. Create the
 list of players here.
 
 Always end this method with a call to `begin_game()`.
 
-`**begin_game(**players=None**)**`
-`**end_game()**`
-`**start_round()**`
-`**end_round()**`
-`**start_turn()**`
-`**end_turn()**`
-`**roll(**dice**)**`
-`**decide()**`
-`**invalid_decision()**`
+**begin_game(**players=None**)**
+**end_game()**
+**start_round()**
+**end_round()**
+**start_turn()**
+**end_turn()**
+**roll(**dice**)**
+**decide()**
+**invalid_decision()**
 
 Implementations:
 ----------------
