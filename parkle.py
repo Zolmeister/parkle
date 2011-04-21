@@ -34,22 +34,6 @@ def nest_dice(flattened_dice):
         
     return dice
 
-def roll(n):
-    """Return list of n  (1 <= n <= 6) random numbers from 1 to 6.
-
-    Return value will be sorted by increasing value
-    
-    Return:
-        [[value, number of value], ...]
-
-        [[3, 2], [4, 4]] == Pair of 3s, four 4s.
-    """
-    l = []
-    for i in range(0, n):
-        l.append(rand.randint(1,6))
-
-    return nest_dice(l)
-
 def points_possible(dice):
     """Determine if it is possible to score points with dice.
     
@@ -191,6 +175,22 @@ class Parkle(object):
         self.players = []
         self.scores = []
     
+    def roll(self, n):
+        """Return list of n  (1 <= n <= 6) random numbers from 1 to 6.
+
+        Return value will be sorted by increasing value
+        
+        Return:
+            [[value, number of value], ...]
+
+            [[3, 2], [4, 4]] == Pair of 3s, four 4s.
+        """
+        l = []
+        for i in range(0, n):
+            l.append(rand.randint(1,6))
+
+        return nest_dice(l)
+    
     def start_game(self):
         """Return winning player.
         
@@ -253,7 +253,7 @@ class Parkle(object):
                 break
 
             if reroll:
-                d = roll(dice_left);
+                d = self.roll(dice_left);
                 player.rolls += 1
 
             reroll = True
