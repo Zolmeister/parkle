@@ -1,5 +1,6 @@
 ## Parkle
-
 __version__ = "0.2.3"
+__author__ = "Bradley Zeis"
 
-from . import parkle
+from .parkle import *
+
