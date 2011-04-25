@@ -437,11 +437,12 @@ class ParkleConsoleView(ParkleView):
                 class_name = raw_input("Class Name: ")
                 sys.path.append(os.path.split(path)[0])
                 try:
-                    module = __import__(os.path.split(path)[1][:-3])
-                    c = module.__dict__[class_name]
-                    p = c()
+                    namespace = {}
+                    execfile(os.path.abspath(path))
+                    p = locals()[class_name]()
                     players.append(p)
-                except:
+
+                except ImportError, AttributeError:
                     print "Couldn't find file/class.\n"
                 continue
 
