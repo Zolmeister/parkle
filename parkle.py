@@ -377,7 +377,7 @@ class Parkle(object):
 class ParklePlayer(object):
     def __init__(self):
         self.name = ""
-        self.kept = []; # [[[1, 1], [5]], [[3, 3, 3]]] = Pair of 2s and a 5 kept first roll, triple 3s kept second roll
+        self.kept = []  # [[[1, 1], [5]], [[3, 3, 3]]] = Pair of 2s and a 5 kept first roll, triple 3s kept second roll
                         # Each sublist is called a "kept-set"
         self.n = 0      # Player order
         self.rolls = 0  # Number of rolls this turn
