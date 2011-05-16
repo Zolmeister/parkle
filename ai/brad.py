@@ -35,10 +35,10 @@ class Brad(parkle.ParklePlayer):
         kset = []
         group.append(kset)
 
-        dice_count = len(flatten_dice(odice))
+        dice_count = len(parkle.flatten_dice(odice))
         kept_count = 0
 
-        dice = copy_dice(odice)
+        dice = parkle.copy_dice(odice)
 
         ## Determine if there is a "high scoring" set
         if dice_count == 6:
@@ -145,7 +145,7 @@ class Brad(parkle.ParklePlayer):
 
         groupscore = 0
         for i in range(len(group)):
-            groupscore += calculate_set(group[i])
+            groupscore += parkle.calculate_set(group[i])
 
         # passed goal
         res = 0
@@ -188,8 +188,8 @@ class Brad(parkle.ParklePlayer):
                         group.append([dice[-2][0]])
                         kept_count += 1
 
-        for i in range(len(group)):
-            print group[i],
-        print
+        #for i in range(len(group)):
+        #    print group[i],
+        #print
         return res
 

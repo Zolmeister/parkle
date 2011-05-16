@@ -157,7 +157,7 @@ class ParkleView(object):
     def start_turn(self):
         pass
 
-    def end_turn(self):
+    def end_turn(self, roundscore):
         pass
 
     def roll(self, dice):
@@ -437,9 +437,8 @@ class ParkleConsoleView(ParkleView):
                 class_name = raw_input("Class Name: ")
                 sys.path.append(os.path.split(path)[0])
                 try:
-                    namespace = {}
-                    execfile(os.path.abspath(path))
-                    p = locals()[class_name]()
+                    m = __import__(os.path.split(path)[1][:-3])
+                    p = m.__dict__[class_name]()
                     players.append(p)
 
                 except ImportError, AttributeError:
