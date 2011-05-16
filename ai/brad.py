@@ -1,3 +1,6 @@
+## Parkle
+## Bradley Zeis
+
 import parkle
 
 class Brad(parkle.ParklePlayer):
