@@ -1,7 +1,7 @@
-## Parkle 0.2.3
+## Parkle 0.3.0
 ##
 ## Bradley Zeis
-## Zoli Kahn
+## Zolmeister
 
 import sys
 import os
@@ -434,11 +434,11 @@ class ParkleConsoleView(ParkleView):
 
             elif r.lower() == "a":
                 path = raw_input("File path: ")
-                class_name = raw_input("Class Name: ")
-                sys.path.append(os.path.split(path)[0])
+                #class_name = raw_input("Class Name: ")
+                sys.path.append('ai')
                 try:
-                    m = __import__(os.path.split(path)[1][:-3])
-                    p = m.__dict__[class_name]()
+                    m = __import__(path)
+                    p = m.__dict__[path]()
                     players.append(p)
 
                 except ImportError, AttributeError:

@@ -3,7 +3,7 @@
 
 import parkle
 
-class Brad(parkle.ParklePlayer):
+class brad(parkle.ParklePlayer):
     def __init__(self):
         self.name = "Brad"
         self.base_threshold = 0.5  # How "risky" to be for the entire game

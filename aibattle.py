@@ -6,7 +6,7 @@ import parkle
 
 class ParkleAIBattleView(parkle.ParkleView):
     def start_game(self):
-        print "Parkle v0.2.3\n----------------\n"
+        print "Parkle v0.3.0\n----------------\n"
 
         players = []
         while(1):
@@ -30,12 +30,12 @@ class ParkleAIBattleView(parkle.ParkleView):
 
             elif r.lower() == "a":
                 path = raw_input("File path: ")
-                class_name = raw_input("Class Name: ")
-                sys.path.append(os.path.split(path)[0])
+                #class_name = raw_input("Class Name: ")
+                sys.path.append('ai')
                 try:
                     namespace = {}
-                    execfile(os.path.abspath(path))
-                    p = locals()[class_name]()
+                    m = __import__(path)
+                    p = m.__dict__[path]()
                     players.append(p)
 
                 except ImportError, AttributeError:

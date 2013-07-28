@@ -1,11 +1,9 @@
 ## Parkle
-## Zoli Kahn
-
-__version__ = "0.2.3"
+## Zoli Kahan
 
 import parkle
 
-class Zoli(parkle.ParklePlayer):
+class zoli(parkle.ParklePlayer):
     def __init__(self):
         self.name = "Zoli"#raw_input("Bot Name: ")
         print

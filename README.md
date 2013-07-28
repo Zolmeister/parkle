@@ -1,4 +1,4 @@
-Parkle v0.2.3
+Parkle v0.3.0
 ============= 
 
 Parkle is an open-source [Farkle](http://en.wikipedia.org/wiki/Farkle)
@@ -26,8 +26,8 @@ Parkle v0.2.3 comes with a sample AI bot, JimmyBot. Note that this is just a
 proof of concept, it is not intended to be a real opponent.
 
 To load a bot into the game, select "a" when adding players, enter the
-name of the python file where your class resides (with the .py extension),
-and the name of your class.
+name of the python file where your class resides (without the .py extension or the 'ai/' path in front),
+which should match the name of your class
 
 Documentation:
 --------------
